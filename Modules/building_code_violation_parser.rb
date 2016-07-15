@@ -14,10 +14,21 @@ OUTPUT_HEADERS = [
 
 def get_violations_per_category(file_path)
   vios_tbl = CSV.read(file_path, headers: true)
+  output_csv_rows ||= [OUTPUT_HEADERS]
 
   grouped_vios_tbl = group_by_category(vios_tbl, 'violation_category')
   sorted_vios_tbl = group_sort_by(grouped_vios_tbl, 'violation_date')
 
+  sorted_vios_tbl.each do |category, collection|
+    output_csv_rows.push([
+      category.to_s,
+      collection.count,
+      collection.first['violation_date'],
+      collection.last['violation_date']
+    ])
+  end
+
+  output_csv_rows
 end
 
 
