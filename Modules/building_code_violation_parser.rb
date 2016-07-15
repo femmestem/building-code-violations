@@ -1,8 +1,10 @@
 require "rubygems"
 require "bundler/setup"
 require "csv"
+require "./modules/file_validation_helpers"
 require "./modules/csv_pivot"
 
+include FileValidator
 include CSVPivotable
 
 OUTPUT_HEADERS = [
@@ -33,6 +35,7 @@ end
 
 
 def output_to_csv(rows_array, filename)
+  return unless valid?(filename)
 
   puts "Writing to '#{filename}'..."
   CSV.open("#{filename}", "w") do |csv|
